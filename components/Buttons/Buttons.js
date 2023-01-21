@@ -1,8 +1,8 @@
 import React, { memo } from "react";
 import styled from "styled-components";
-import helper from "../../../helper";
-import { uiconfig } from "../../configs/uiconfig";
-const { setColor } = helper;
+import { uiConfig } from "../../configs/uiConfig";
+import { utils } from "../../utils";
+const { setColor } = utils;
 
 const normalizeButton = ({ backgroundColor }) => {
   return `
@@ -26,7 +26,7 @@ Buttons.WideButton = styled.button`
     normalizeButton({
       backgroundColor: props.backgroundColor
         ? props.backgroundColor
-        : uiconfig.primaryColor,
+        : uiConfig.primaryColor,
     })};
 `;
 const CircleButton = styled.button`
@@ -43,7 +43,7 @@ const CircleButton = styled.button`
     normalizeButton({
       backgroundColor: props.backgroundColor
         ? props.backgroundColor
-        : uiconfig.primaryColor,
+        : uiConfig.primaryColor,
     })}
 
   ${(props) => props.customStyle && props.customStyle}
@@ -58,7 +58,7 @@ const RoundedBoxButton = styled.button`
     normalizeButton({
       backgroundColor: props.backgroundColor
         ? props.backgroundColor
-        : uiconfig.primaryColor,
+        : uiConfig.primaryColor,
     })};
   ${(props) => props.full && "width: 100%"};
   ${(props) =>
@@ -89,9 +89,9 @@ const IconCircleButton = ({
 Buttons.CircleButton = memo(CircleButton);
 Buttons.IconCircleButton = memo(IconCircleButton);
 Buttons.RoundedBoxButton = memo(RoundedBoxButton);
-const utils = {
+const utils_buttons = {
   normalizeButton,
 };
-Buttons.utils = utils;
+Buttons.utils = utils_buttons;
 
 export default Buttons;

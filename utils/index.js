@@ -1,4 +1,6 @@
-export const util = {
+import _ from "lodash";
+
+export const utils = {
   setColor: (hex, percent) => {
     // strip the leading # if it's there
     hex = hex.replace(/^\s*#|\s*$/g, "");
@@ -119,5 +121,12 @@ export const util = {
       }
       return "Internet Explorer " + rv;
     }
+  },
+  compareByChar: (a, b) => {
+    const first = String(a).substring(0, 1).toLowerCase();
+    const second = String(b).substring(0, 1).toLowerCase();
+    if (first > second) return 1;
+    if (first < second) return -1;
+    if (first === second) return 0;
   },
 };

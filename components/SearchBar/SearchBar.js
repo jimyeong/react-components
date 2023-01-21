@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
 import styled from "styled-components";
-import { INPUTS, BUTTONS } from "..";
+import { INPUTS, Buttons } from "..";
 import { useInput } from "../../hooks/useInput";
+import { utils } from "../../utils";
 
 const SearchBarBlock = styled.div`
   position: relative;
-  padding-right: 120px;
+  padding-right: 140px;
 
   > button {
     width: 100px;
@@ -14,23 +15,52 @@ const SearchBarBlock = styled.div`
     top: 50%;
     transform: translateY(-50%);
     border: none;
+    color: white;
   }
 `;
 
-function SearchBar({ inputId, callback, initialState }) {
-  const [values, setValues] = useInput(initialState);
+/**
+ * do not ever fix this code up to your need
+ * @author jimmy jung
+ * @date 01.15.23
+ * @param {id, callback}
+ * @returns
+ */
+function SearchBar({ id, callback }) {
+  const initialValue = { [id]: "" };
+
+  const [values, setValues] = useState(initialValue);
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  };
+  const onReset = () => {
+    setValues(initialValue);
+  };
   const onClick = () => {
     onReset();
-    if (callback) callback();
+    if (callback) callback(values[id]);
   };
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       onReset();
-      if (callback) callback();
+      if (callback) callback(values[id]);
     }
   };
-  const onChange = () => {};
-  return <SearchBarBlock></SearchBarBlock>;
+  return (
+    <SearchBarBlock>
+      <INPUTS.INPUT_TEXT
+        name={id}
+        value={values[id]}
+        onChange={onChange}
+        onKeyDown={handleKeyDown}
+      />
+      <Buttons.RoundedBoxButton onClick={onClick}>GO!</Buttons.RoundedBoxButton>
+    </SearchBarBlock>
+  );
 }
 
 export default React.memo(SearchBar);

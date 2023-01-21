@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import { useReducer } from "react";
-import { useState } from "react";
+import { useState, useReducer, useEffect } from "react";
 
 export const TYPE_LOAD = {
   IDLE: "IDLE",
@@ -12,27 +10,28 @@ export const TYPE_LOAD = {
 
 const asyncReducer = (state, action) => {
   switch (action.type) {
-    case "IDLE":
+    case TYPE_LOAD.IDLE:
       return {
         ...state,
         status: TYPE_LOAD.IDLE,
       };
-    case "LOADING":
+    case TYPE_LOAD.LOADING:
       return {
         ...state,
         status: TYPE_LOAD.LOADING,
       };
-    case "SUCCESS":
+    case TYPE_LOAD.SUCCESS:
       return {
         ...state,
-        status: TYPE_LOAD.SUCCESS,
+        status: TYPE_LOAD.IDLE,
+        data: action.payload,
       };
-    case "ERROR":
+    case TYPE_LOAD.ERROR:
       return {
         ...state,
         status: TYPE_LOAD.ERROR,
       };
-    case "RETRY":
+    case TYPE_LOAD.RETRY:
       return {
         ...state,
         status: TYPE_LOAD.RETRY,
@@ -47,23 +46,27 @@ const intialState = {
 };
 
 export function useAsync(callback, depth = []) {
-  const [state, dispatch] = useReducer(asyncReducer, intialState);
+  const [asyncState, asyncDispatch] = useReducer(asyncReducer, intialState);
 
   useEffect(() => {
-    console.log("useAsync 실행됨");
     fetchData();
   }, depth);
 
   const fetchData = async () => {
+    asyncDispatch({ type: TYPE_LOAD.LOADING, ...asyncState });
     try {
-      dispatch({ type: TYPE_LOAD.LOADING, ...state });
       const result = await callback();
-      dispatch({ type: TYPE_LOAD.IDLE, data: result, ...state });
+      console.log("@@@@!!@#!@#", result);
+      asyncDispatch({
+        type: TYPE_LOAD.SUCCESS,
+        payload: result.data,
+        ...asyncState,
+      });
     } catch (error) {
       console.error(error);
-      dispatch({ type: TYPE_LOAD.ERROR, ...state });
+      asyncDispatch({ type: TYPE_LOAD.ERROR, ...asyncState });
     }
   };
 
-  return [state, dispatch];
+  return [asyncState, asyncDispatch];
 }

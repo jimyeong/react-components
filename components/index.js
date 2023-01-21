@@ -1,5 +1,6 @@
 import INPUTS from "./Forms";
 import SearchBar from "./SearchBar/SearchBar";
-import BUTTONS from "./Buttons";
+import Buttons from "./Buttons/Buttons";
+import Wrappers from "./Wrappers";
 
-export { INPUTS, SearchBar, BUTTONS };
+export { INPUTS, SearchBar, Buttons, Wrappers };
